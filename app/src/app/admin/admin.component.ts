@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ProductsService } from '../products.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { imageUrlValidator } from './validator';
 
 @Component({
   selector: 'app-admin',
@@ -46,7 +47,11 @@ import { FormControl } from '@angular/forms';
 export class AdminComponent {
   public name = new FormControl('');
   public description = new FormControl('');
-  public imageUrl = new FormControl('');
+  public imageUrl = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/https:\/\/[a-z0-9\d.\/\-?=&]*/mi),
+    imageUrlValidator('unsplash.com')
+  ]);
   private productsService = inject(ProductsService);
 
   onSubmit(): void {

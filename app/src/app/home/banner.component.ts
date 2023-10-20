@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, inject, ElementRef, ViewChild, SecurityContext } from '@angular/core';
 import { PromosService } from '../promos.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -10,13 +10,15 @@ import { DomSanitizer } from '@angular/platform-browser';
   styles: []
 })
 export class BannerComponent implements AfterViewInit {
+  private sanitizer = inject(DomSanitizer);
 
   @ViewChild('banner') public el!: ElementRef<HTMLElement>;
   private promosService = inject(PromosService);
 
   ngAfterViewInit(): void {
     const message = this.promosService.getBanner();
-    this.el.nativeElement.innerHTML = message;
+    const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, message);
+    this.el.nativeElement.innerHTML = sanitized ?? '';
   }
   
 }
