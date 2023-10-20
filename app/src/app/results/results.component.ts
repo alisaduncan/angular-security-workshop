@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { ProductsService } from '../products.service';
 import { Observable } from 'rxjs';
 import { Product } from '../product';
@@ -9,7 +9,7 @@ import { Product } from '../product';
   <h2 class="mt-3 text-center text-4xl text-teal-500">So you want cookies?</h2>
 
   <p class="m-6 text-center text-lg">We're on it! Searching our kitchen for...</p>
-  <div #term></div>
+  <div [innerHTML]="query"></div>
 
   <ng-container *ngIf="(results$ | async)">
     <div class="flex my-12 justify-center">
@@ -20,8 +20,7 @@ import { Product } from '../product';
   <ng-container>
   `,
 })
-export class ResultsComponent implements OnInit, AfterViewInit {
-  @ViewChild('term') public searchEl!: ElementRef<HTMLElement>;
+export class ResultsComponent implements OnInit {
   @Input() query = '';
 
   public results$!: Observable<Product[]>;
@@ -33,9 +32,5 @@ export class ResultsComponent implements OnInit, AfterViewInit {
     if (this.query) {
       this.results$ = this.productsService.findProducts(this.query);
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.searchEl.nativeElement.innerHTML = this.query;
   }
 }

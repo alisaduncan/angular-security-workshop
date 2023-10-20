@@ -8,7 +8,7 @@ import { ProductsService } from '../products.service';
   <div class="flex flex-wrap">
     <div class="flex m-6 h-56" *ngFor="let product of products$ | async">
       <div class="w-36 relative">
-          <img [src]="product.imageUrl" alt="{{product.name}}" class="absolute inset-0 w-full h-full object-cover rounded-l-lg" />
+          <img src="{{product.imageUrl}}" alt="{{product.name}}" class="absolute inset-0 w-full h-full object-cover rounded-l-lg" />
       </div>
       <div class="p-6 border-y border-r border-sky-300 rounded-r-lg w-56 flex flex-col">
         <h2 class="text-xl text-violet-600">{{product.name}}</h2>

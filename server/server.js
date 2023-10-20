@@ -25,9 +25,6 @@ const products = [{
   name: 'Chocolate Chip',
   description: 'A soft chewy chocolate cookie',
   imageUrl: 'https://images.unsplash.com/photo-1600147566401-c2056eb69479?auto=format&fit=crop&w=500&q=60'
-  // imageUrl: `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"
-  //     <image href="test.png" height="200" width="200" />
-  //     </svg>`
 }, {
   id: 2,
   name: 'Delightful Macaron',
