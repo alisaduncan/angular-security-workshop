@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-root',
@@ -16,4 +18,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  private oidcSecurityService = inject(OidcSecurityService);
+
+  constructor() {
+    this.oidcSecurityService.checkAuth().pipe(takeUntilDestroyed()).subscribe(res => console.log(res));
+  }
 }
