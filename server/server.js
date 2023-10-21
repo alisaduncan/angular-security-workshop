@@ -1,6 +1,10 @@
 const express = require('express')
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const OktaJwtVerifier = require ('@okta/jwt-verifier');
+const oktaJwtVerifier = new OktaJwtVerifier({
+  issuer: "https://{yourOktaDomain}/oauth2/default"
+});
 
 const app = express();
 const port = 3000;
@@ -27,6 +31,27 @@ const products = [{
   imageUrl: 'https://images.unsplash.com/photo-1619149651177-b09092806f1a?auto=format&fit=crop&w=500&q=60'
 }];
 
+const checkAuthorized = async(req, res, next) => {
+  const authHeader = req.headers.authorization || '';
+  const match = authHeader.match(/Bearer (.+)/);
+  if (!match) { 
+    return res.status(401).send();
+  }
+
+  const accessToken = match[1];
+  if (!accessToken) {
+    return res.status(401).send();
+  }
+
+  try {
+    await oktaJwtVerifier.verifyAccessToken(accessToken, 'api://default');
+  } catch (err) { 
+    return res.status(401).send(err.message);
+  }
+
+  next();
+}
+
 app
 .use(cors())
 .use(cookieParser())
@@ -43,7 +68,7 @@ app.get('/api/xsrfEndpoint', (req, res, next) => {
 
 app.route('/api/products')
 .get((_, res) => res.json(products))
-.post((req, res) => {
+.post(checkAuthorized, (req, res) => {
     const {name, description, imageUrl} = req.body;
     products.push({
         id: products.length + 1, 
