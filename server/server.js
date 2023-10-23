@@ -1,6 +1,5 @@
 const express = require('express')
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const OktaJwtVerifier = require ('@okta/jwt-verifier');
 const oktaJwtVerifier = new OktaJwtVerifier({
   issuer: "https://{yourOktaDomain}/oauth2/default"
@@ -53,7 +52,6 @@ const checkAuthorized = async(req, res, next) => {
 }
 
 app
-.use(cors())
 .use(cookieParser())
 .use(express.json())
 .listen(port, () => {
@@ -69,6 +67,7 @@ app.get('/api/xsrfEndpoint', (req, res, next) => {
 app.route('/api/products')
 .get((_, res) => res.json(products))
 .post(checkAuthorized, (req, res) => {
+    // don't forget to check XSRF
     const {name, description, imageUrl} = req.body;
     products.push({
         id: products.length + 1, 

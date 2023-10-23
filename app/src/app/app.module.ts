@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +19,11 @@ import { FeaturedComponent } from './home/featured.component';
 import { MembersComponent } from './members/members.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 import { AuthInterceptor } from './auth.interceptor';
+import { Observable } from 'rxjs';
+
+function xsrfTokenFactory(http: HttpClient): () => Observable<any> {
+  return () => http.get('/api/xsrfEndpoint');
+}
 
 @NgModule({
   declarations: [
@@ -42,10 +47,12 @@ import { AuthInterceptor } from './auth.interceptor';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AuthConfigModule
+    AuthConfigModule,
+    HttpClientXsrfModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: APP_INITIALIZER, useFactory: xsrfTokenFactory, deps: [HttpClient], multi: true }
   ],
   bootstrap: [AppComponent]
 })
