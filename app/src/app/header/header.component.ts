@@ -16,6 +16,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
                 <ng-template #logout>
                   <li class="pr-5"><a routerLink="/members" class="uppercase">Cookie Jar</a></li>
+                  <li *ngIf="isAdmin$ | async" class="pr-5">
+                    <a routerLink="/admin" class="uppercase">Manage</a>
+                  </li>
                   <li><button (click)="onLogout()" class="uppercase">Logout</button></li>
                 </ng-template>
             </div>
@@ -27,6 +30,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class HeaderComponent {
   public authService = inject(AuthService);
   public isAuthenticated$ = this.authService.isAuthenticated.pipe(takeUntilDestroyed());
+  public isAdmin$ = this.authService.isAdmin.pipe(takeUntilDestroyed());
 
   onLogin(): void {
     this.authService.login();

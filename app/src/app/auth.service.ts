@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { map, take } from 'rxjs';
+import { filter, map, take } from 'rxjs';
 
 export type ROLE = 'admin' | 'member';
 
@@ -11,7 +11,12 @@ export class AuthService {
   private oidcSecurityService = inject(OidcSecurityService);
 
   readonly isAuthenticated = this.oidcSecurityService.isAuthenticated$.pipe(
-    map(res => res.isAuthenticated)
+    map(res => res.isAuthenticated),
+  );
+
+  readonly isAdmin = this.oidcSecurityService.userData$.pipe(
+    filter(data => !!data && data.userData),
+    map(data => data.userData['userType'] === 'admin')
   );
 
   login(): void {
