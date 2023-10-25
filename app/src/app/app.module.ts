@@ -20,6 +20,7 @@ import { MembersComponent } from './members/members.component';
 import { AuthConfigModule } from './auth/auth-config.module';
 import { AuthInterceptor } from './auth.interceptor';
 import { Observable } from 'rxjs';
+import { UserTypeDirective } from './user-type.directive';
 
 function xsrfTokenFactory(http: HttpClient): () => Observable<any> {
   return () => http.get('/api/xsrfEndpoint');
@@ -39,7 +40,8 @@ function xsrfTokenFactory(http: HttpClient): () => Observable<any> {
     CoffeePromoComponent,
     ResultsComponent,
     FeaturedComponent,
-    MembersComponent
+    MembersComponent,
+    UserTypeDirective
   ],
   imports: [
     BrowserModule,

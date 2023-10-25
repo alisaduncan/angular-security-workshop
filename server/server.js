@@ -2,7 +2,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser');
 const OktaJwtVerifier = require ('@okta/jwt-verifier');
 const oktaJwtVerifier = new OktaJwtVerifier({
-  issuer: "https://{yourOktaDomain}/oauth2/default"
+  issuer: "https://dev-11264579.okta.com/oauth2/default"
 });
 
 const app = express();

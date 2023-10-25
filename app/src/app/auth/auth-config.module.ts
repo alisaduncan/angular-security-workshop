@@ -5,10 +5,10 @@ import { AuthModule } from 'angular-auth-oidc-client';
 @NgModule({
     imports: [AuthModule.forRoot({
         config: {
-              authority: 'https://{yourOktaDomain}/oauth2/default',
-              redirectUrl: window.location.origin,
-              postLogoutRedirectUri: window.location.origin,
-              clientId: '{yourOktaClientID}',
+            authority: 'https://dev-11264579.okta.com/oauth2/default',
+            redirectUrl: window.location.origin,
+            postLogoutRedirectUri: window.location.origin,
+            clientId: '0oabapji4aOpJGQPE5d7',
               scope: 'openid profile offline_access',
               responseType: 'code',
               silentRenew: true,

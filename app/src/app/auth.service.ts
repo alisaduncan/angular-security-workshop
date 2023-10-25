@@ -19,6 +19,11 @@ export class AuthService {
     map(data => data.userData['userType'] === 'admin')
   );
 
+  readonly userType = this.oidcSecurityService.userData$.pipe(
+    filter(data => !!data && data.userData),
+    map(data => data.userData['userType'])
+  );
+
   login(): void {
     this.oidcSecurityService.authorize();
   }
