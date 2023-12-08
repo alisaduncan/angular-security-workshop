@@ -17,15 +17,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const allowedOrigins = ['localhost:3000'];
-    if (!!allowedOrigins.find(origin => request.url.includes(origin))) {
-      this.oidcSecurityService.getAccessToken().pipe(
-        take(1)
-      ).subscribe(t => {
-        const headers = request.headers.set('Authorization', `Bearer ${t}`);
-        request = request.clone({headers});
-      });
+    if (!allowedOrigins.find(origin => request.url.includes(origin))) {
+      return next.handle(request)
     }
-
-    return next.handle(request);
+    return this.oidcService.getAccessToken()
+      .pipe(
+        take(1),
+        switchMap((t) => {
+          const headers = request.headers.set('Authorization', `Bearer ${t}`);
+          request = request.clone({headers});
+          return next.handle(request)
+        })
+      )
   }
 }
